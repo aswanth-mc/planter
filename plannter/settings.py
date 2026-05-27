@@ -81,7 +81,7 @@ WSGI_APPLICATION = 'plannter.wsgi.application'
 if os.getenv("DB_ENGINE") == "sqlite":
     DATABASES = {
     'default': dj_database_url.config(
-        default=os.environ.get("DATABASE_URL")
+        default=os.environ.get("postgresql://postgres:Aswanth2005Supapas1232005@db.kvtvhelpgqvdmpcuahdg.supabase.co:5432/postgres")
     )
 }
 else:
