@@ -81,18 +81,11 @@ WSGI_APPLICATION = 'plannter.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/6.0/ref/settings/#databases
 
-if os.getenv("DB_ENGINE") == "sqlite":
-    DATABASES = {
+DATABASES = {
     'default': dj_database_url.config(
         default=os.environ.get("DATABASE_URL")
     )
 }
-else:
-    DATABASES = {
-    'default': dj_database_url.config(
-        default=os.environ.get("DATABASE_URL")
-    )
-    }
 
 
 # Password validation
