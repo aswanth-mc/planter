@@ -22,12 +22,15 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/6.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-qjfux9g(%%=9bc3cs1ge$)cwjp9i@bg3-v36lzvpsljmxiqw%c'
+SECRET_KEY = os.environ.get("SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = os.environ.get("DEBUG") == "True"
 
 ALLOWED_HOSTS = ['planter-mx8d.onrender.com']
+CSRF_TRUSTED_ORIGINS = [
+    'https://planter-mx8d.onrender.com'
+]
 
 
 # Application definition
@@ -45,14 +48,14 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'whitenoise.middleware.WhiteNoiseMiddleware',
-    'django.middleware.security.SecurityMiddleware',
+    
 ]
 
 ROOT_URLCONF = 'plannter.urls'
@@ -81,7 +84,7 @@ WSGI_APPLICATION = 'plannter.wsgi.application'
 if os.getenv("DB_ENGINE") == "sqlite":
     DATABASES = {
     'default': dj_database_url.config(
-        default=os.environ.get("postgresql://postgres:Aswanth2005Supapas1232005@db.kvtvhelpgqvdmpcuahdg.supabase.co:5432/postgres")
+        default=os.environ.get("DATABASE_URL")
     )
 }
 else:
