@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # Plant Tracker
 
 A Django + PostgreSQL web app to track plants, care activities, lifecycle status, and analytics.
@@ -39,3 +40,6 @@ For quick local runs without PostgreSQL:
 
 - PowerShell: `$env:DB_ENGINE="sqlite"`
 - Then run migrations and start server normally.
+=======
+# planter
+>>>>>>> 94f57b7876c8d1eeaac3862362d6b3d4d3398587
