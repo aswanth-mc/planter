@@ -1,0 +1,80 @@
+{% extends "plants/base.html" %}
+{% block content %}
+<div class="card">
+    <h1>{{ plant.english_name }}</h1>
+    <p><strong>Biological name:</strong> {{ plant.biological_name }}</p>
+    <p><strong>Local name:</strong> {{ plant.local_name|default:"-" }}</p>
+    <p><strong>Family/build name:</strong> {{ plant.family_name|default:"-" }}</p>
+    <p>
+        <strong>Plant count:</strong> {{ plant.count }}
+        <form method="post" action="{% url 'plants:count-adjust' plant.pk %}" class="inline">
+            {% csrf_token %}
+            <input type="hidden" name="action" value="decrease">
+            <input type="hidden" name="next" value="{% url 'plants:detail' plant.pk %}">
+            <button type="submit">-</button>
+        </form>
+        <form method="post" action="{% url 'plants:count-adjust' plant.pk %}" class="inline">
+            {% csrf_token %}
+            <input type="hidden" name="action" value="increase">
+            <input type="hidden" name="next" value="{% url 'plants:detail' plant.pk %}">
+            <button type="submit">+</button>
+        </form>
+    </p>
+    <p><strong>Status:</strong> {{ plant.get_status_display }}</p>
+    <p><strong>Planted on:</strong> {{ plant.planted_on }}</p>
+    <p><strong>Care notes:</strong> {{ plant.care_notes|default:"-" }}</p>
+    {% if plant.image %}
+        <p><img src="{{ plant.image.url }}" alt="{{ plant.english_name }}" style="max-width: 280px; height: auto;"></p>
+    {% endif %}
+
+    <p>
+        <a href="{% url 'plants:update' plant.pk %}">Edit plant</a>
+    </p>
+
+    {% if plant.status == "active" %}
+        <form method="post" action="{% url 'plants:remove' plant.pk %}" class="inline">
+            {% csrf_token %}
+            <button type="submit">Mark as Removed</button>
+        </form>
+    {% endif %}
+    <form method="post" action="{% url 'plants:delete' plant.pk %}" class="inline">
+        {% csrf_token %}
+        <button type="submit" class="warn">Delete Permanently</button>
+    </form>
+</div>
+
+<div class="card">
+    <h2>Add Care Activity</h2>
+    <form method="post" action="{% url 'plants:care-add' plant.pk %}">
+        {% csrf_token %}
+        {{ care_form.as_p }}
+        <button type="submit">Save Activity</button>
+    </form>
+</div>
+
+<div class="card">
+    <h2>Care History</h2>
+    <table>
+        <thead>
+        <tr>
+            <th>Date</th>
+            <th>Type</th>
+            <th>Notes</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for log in plant.care_logs.all %}
+            <tr>
+                <td>{{ log.performed_on }}</td>
+                <td>{{ log.get_care_type_display }}</td>
+                <td>{{ log.notes|default:"-" }}</td>
+            </tr>
+        {% empty %}
+            <tr>
+                <td colspan="3">No care activities yet.</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

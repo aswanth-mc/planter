@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Plant Tracker</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 24px; background: #f7faf7; color: #1d2a1f; }
+        nav { margin-bottom: 18px; }
+        nav a { margin-right: 10px; color: #1c6b32; text-decoration: none; }
+        .card { background: white; border-radius: 8px; padding: 16px; margin-bottom: 14px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+        .messages { list-style: none; padding: 0; }
+        .messages li { padding: 8px 10px; border-radius: 6px; margin-bottom: 8px; background: #e8f4eb; }
+        table { width: 100%; border-collapse: collapse; }
+        th, td { text-align: left; padding: 10px; border-bottom: 1px solid #ddd; }
+        form.inline { display: inline; margin-right: 8px; }
+        label { display: block; margin-top: 10px; }
+        input, textarea, select { width: 100%; padding: 8px; margin-top: 4px; box-sizing: border-box; }
+        button { margin-top: 12px; padding: 8px 12px; border: none; border-radius: 6px; background: #1c6b32; color: #fff; cursor: pointer; }
+        button.warn { background: #9f3b2a; }
+    </style>
+</head>
+<body>
+<nav>
+    <a href="{% url 'plants:list' %}">Plants</a>
+    <a href="{% url 'plants:create' %}">Add Plant</a>
+    <a href="{% url 'plants:dashboard' %}">Dashboard</a>
+</nav>
+
+{% if messages %}
+    <ul class="messages">
+        {% for message in messages %}
+            <li>{{ message }}</li>
+        {% endfor %}
+    </ul>
+{% endif %}
+
+{% block content %}{% endblock %}
+</body>
+</html>

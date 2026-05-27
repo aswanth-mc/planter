@@ -1,0 +1,58 @@
+{% extends "plants/base.html" %}
+{% block content %}
+<div class="card">
+    <h1>My Plants</h1>
+    <form method="get">
+        <label>
+            <input type="checkbox" name="show_removed" value="1" {% if request.GET.show_removed == "1" %}checked{% endif %}>
+            Show removed plants
+        </label>
+        <button type="submit">Apply</button>
+    </form>
+</div>
+
+<div class="card">
+    <table>
+        <thead>
+        <tr>
+            <th>English Name</th>
+            <th>Biological Name</th>
+            <th>Local Name</th>
+            <th>Count</th>
+            <th>Status</th>
+            <th>Planted On</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for plant in plants %}
+            <tr>
+                <td><a href="{% url 'plants:detail' plant.pk %}">{{ plant.english_name }}</a></td>
+                <td>{{ plant.biological_name }}</td>
+                <td>{{ plant.local_name|default:"-" }}</td>
+                <td>
+                    <form method="post" action="{% url 'plants:count-adjust' plant.pk %}" class="inline">
+                        {% csrf_token %}
+                        <input type="hidden" name="action" value="decrease">
+                        <input type="hidden" name="next" value="{{ request.get_full_path }}">
+                        <button type="submit">-</button>
+                    </form>
+                    <strong>{{ plant.count }}</strong>
+                    <form method="post" action="{% url 'plants:count-adjust' plant.pk %}" class="inline">
+                        {% csrf_token %}
+                        <input type="hidden" name="action" value="increase">
+                        <input type="hidden" name="next" value="{{ request.get_full_path }}">
+                        <button type="submit">+</button>
+                    </form>
+                </td>
+                <td>{{ plant.get_status_display }}</td>
+                <td>{{ plant.planted_on }}</td>
+            </tr>
+        {% empty %}
+            <tr>
+                <td colspan="6">No plants yet. Add your first plant.</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

@@ -1,0 +1,52 @@
+{% extends "plants/base.html" %}
+{% block content %}
+<div class="card">
+    <h1>Activity Dashboard</h1>
+    <form method="get">
+        <label for="start_date">Start date</label>
+        <input type="date" id="start_date" name="start_date" value="{{ start_date }}">
+
+        <label for="end_date">End date</label>
+        <input type="date" id="end_date" name="end_date" value="{{ end_date }}">
+
+        <button type="submit">Filter</button>
+    </form>
+</div>
+
+<div class="card">
+    <h2>Plants Added Over Time</h2>
+    <canvas id="plantsChart" height="120"></canvas>
+    {{ chart_labels|json_script:"chart-labels" }}
+    {{ chart_values|json_script:"chart-values" }}
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    const labels = JSON.parse(document.getElementById("chart-labels").textContent);
+    const values = JSON.parse(document.getElementById("chart-values").textContent);
+
+    const ctx = document.getElementById("plantsChart").getContext("2d");
+    new Chart(ctx, {
+        type: "line",
+        data: {
+            labels: labels,
+            datasets: [{
+                label: "Plants Added",
+                data: values,
+                borderWidth: 2,
+                tension: 0.2
+            }]
+        },
+        options: {
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    ticks: {
+                        precision: 0
+                    }
+                }
+            }
+        }
+    });
+</script>
+{% endblock %}

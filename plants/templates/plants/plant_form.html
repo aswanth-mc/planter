@@ -1,0 +1,11 @@
+{% extends "plants/base.html" %}
+{% block content %}
+<div class="card">
+    <h1>{% if object %}Edit Plant{% else %}Add Plant{% endif %}</h1>
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Save</button>
+    </form>
+</div>
+{% endblock %}
