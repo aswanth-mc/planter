@@ -89,14 +89,9 @@ if os.getenv("DB_ENGINE") == "sqlite":
 }
 else:
     DATABASES = {
-        "default": {
-            "ENGINE": "django.db.backends.postgresql",
-            "NAME": os.getenv("POSTGRES_DB", "plannter"),
-            "USER": os.getenv("POSTGRES_USER", "postgres"),
-            "PASSWORD": os.getenv("POSTGRES_PASSWORD", "a1s2w3"),
-            "HOST": os.getenv("POSTGRES_HOST", "localhost"),
-            "PORT": os.getenv("POSTGRES_PORT", "5432"),
-        }
+    'default': dj_database_url.config(
+        default=os.environ.get("DATABASE_URL")
+    )
     }
 
 
